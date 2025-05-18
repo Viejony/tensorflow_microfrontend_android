@@ -14,16 +14,20 @@
 // Optional global state if you want one‑shot init + reuse.
 static FrontendState g_frontend_state;
 static bool g_state_ready = false;
+static bool g_enable_log = false;
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_jamstudios_microfrontend_FeatureExtractor_init
 (
     JNIEnv*,
     jobject /* this */,
-    jint sample_rate
+    jint sample_rate,
+    jboolean enable_log
 ) {
-    //la concha
-    LOGI("Microfrontend init started");
+    // Set log
+    g_enable_log = enable_log;
+
+    if (g_enable_log) LOGI("Microfrontend init started");
     FrontendConfig config;
     FrontendFillConfigWithDefaults(&config);
 
@@ -45,12 +49,12 @@ Java_com_jamstudios_microfrontend_FeatureExtractor_init
     config.log_scale.scale_shift = 6;
 
     if (!FrontendPopulateState(&config, &g_frontend_state, sample_rate)) {
-        LOGE("FrontendPopulateState failed");
+        if (g_enable_log) LOGE("FrontendPopulateState failed");
         g_state_ready = false;
         return;
     }
     g_state_ready = true;
-    LOGI("Microfrontend init complete (sr=%d)", sample_rate);
+    if (g_enable_log) LOGI("Microfrontend init complete (sr=%d)", sample_rate);
 }
 
 // ---------------------------------------------------------
@@ -64,21 +68,21 @@ Java_com_jamstudios_microfrontend_FeatureExtractor_process
 ) {
 
     if (!g_state_ready) {
-        LOGE("Microfrontend state not initialised – call init() first");
+        if (g_enable_log) LOGE("Microfrontend state not initialised – call init() first");
         return nullptr;
     }
 
     // ---------- 1. Validate & copy input ----------
     if (input == nullptr) {
-        LOGE("Null input array");
+        if (g_enable_log) LOGE("Null input array");
         return nullptr;
     }
     const jsize num_samples = env->GetArrayLength(input);
     if (num_samples <= 0) {
-        LOGE("Empty input array");
+        if (g_enable_log) LOGE("Empty input array");
         return nullptr;
     }
-    LOGI("Processing %d PCM samples", num_samples);
+    if (g_enable_log) LOGI("Processing %d PCM samples", num_samples);
 
     std::vector<int16_t> pcm(num_samples);
     env->GetShortArrayRegion(input, 0, num_samples, pcm.data());
@@ -94,7 +98,7 @@ Java_com_jamstudios_microfrontend_FeatureExtractor_process
                                                     pcm.size() - cursor,
                                                     &samples_read);
         if (samples_read == 0) {
-            LOGE("FrontendProcessSamples returned 0 – aborting loop");
+            if (g_enable_log) LOGE("FrontendProcessSamples returned 0 – aborting loop");
             break;
         }
         cursor += samples_read;
@@ -105,12 +109,12 @@ Java_com_jamstudios_microfrontend_FeatureExtractor_process
         }
     }
 
-    LOGI("Generated %d frames, %zu feature values", frame_cnt, features.size());
+    if (g_enable_log) LOGI("Generated %d frames, %zu feature values", frame_cnt, features.size());
 
     // ---------- 3. Convert to jshortArray ----------
     jshortArray j_out = env->NewShortArray(static_cast<jsize>(features.size()));
     if (!j_out) {
-        LOGE("Failed to allocate jshortArray");
+        if (g_enable_log) LOGE("Failed to allocate jshortArray");
         return nullptr;
     }
     env->SetShortArrayRegion(j_out, 0, static_cast<jsize>(features.size()),

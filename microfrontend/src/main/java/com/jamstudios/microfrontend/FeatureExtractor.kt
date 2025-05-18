@@ -2,7 +2,7 @@ package com.jamstudios.microfrontend
 
 class FeatureExtractor {
 
-    external fun init(sampleRate: Int)
+    external fun init(sampleRate: Int, enableLog: Boolean = false)
 
     external fun process(audioData: ShortArray): ShortArray
 

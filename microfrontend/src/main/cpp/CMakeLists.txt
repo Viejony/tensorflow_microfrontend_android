@@ -19,16 +19,14 @@ set(FLATBUFFERS_BUILD_SHAREDLIB OFF CACHE BOOL "Build FlatBuffers as a static li
 add_subdirectory(${FLATBUFFERS_DIR} ${FLATBUFFERS_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 
-# Kissfft
 
-## Standard options used by upstream KISSFFT
+# Kissfft: Standard options used by upstream KISSFFT
 set(KISSFFT_DATATYPE int16_t CACHE STRING "Fixed-point data type" FORCE)
 set(KISSFFT_OPENMP OFF CACHE BOOL "Disable OpenMP support" FORCE)
 set(KISSFFT_STATIC ON CACHE BOOL "Build as a static library" FORCE)
 set(KISSFFT_TEST OFF CACHE BOOL "Disable building tests" FORCE)
 set(KISSFFT_TOOLS OFF CACHE BOOL "Disable building tools" FORCE)
 set(KISSFFT_USE_ALLOCA OFF CACHE BOOL "Avoid alloca() for portability" FORCE)
-#add_definitions(-DKISSFFT_DATATYPE=int16_t)
 add_subdirectory(${KISSFFT_DIR} ${KISSFFT_BINARY_DIR})
 include_directories(${KISSFFT_DIR})
 
@@ -65,7 +63,6 @@ set(FRONTEND_SRCS
         ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/window.c
         ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/window_util.c
 )
-message(WARNING "FRONTEND_SRCS = ${FRONTEND_SRCS}")
 
 
 
@@ -81,7 +78,6 @@ add_library(${CMAKE_PROJECT_NAME} SHARED jmicrofrontend.cpp)
 target_link_libraries(audio_microfrontend
         PRIVATE flatbuffers             # FlatBuffers static lib (for header usage if needed by audio_microfrontend.cc)
         PUBLIC kissfft                  # FFT library (already added via add_subdirectory)
-        PUBLIC m                        # math library for FFT (if required on this platform)
 )
 target_link_libraries(${CMAKE_PROJECT_NAME}
         PUBLIC audio_microfrontend      # Microfrontend DSP code

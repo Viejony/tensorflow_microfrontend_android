@@ -8,7 +8,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.lifecycleScope
 import com.jamstudios.amf_example.ui.screens.MainScreen
 import com.jamstudios.amf_example.ui.theme.AudioMicrofrontendExampleTheme
+import com.jamstudios.microfrontend.AudioUtils
 import com.jamstudios.microfrontend.FeatureExtractor
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -39,10 +41,10 @@ class MainActivity : ComponentActivity() {
     private fun runMultipleTests() {
         lifecycleScope.launch {
             isRunning.value = true
+            delay(200)
             val initTime = System.currentTimeMillis()
             for (i in 0 until 100) {
                 testJMicrofrontendJNI("Test ${i + 1}")
-                //delay(200)
             }
             val endTime = System.currentTimeMillis()
             val duration = endTime - initTime
@@ -59,10 +61,10 @@ class MainActivity : ComponentActivity() {
         // With microfrontend native lib
         try {
             // Load audio from assets
-            val file = Utils.getAssetAsFile(this, "common_voice_en_114475.wav")
+            val file = AudioUtils.getAssetAsFile(this, "common_voice_en_114475.wav")
 
-            // Convert WAV file to FloatArray
-            val audioArray = Utils.decodeMonoWaveFileAsShortArray(file)
+            // Convert WAV file to ShortArray
+            val audioArray = AudioUtils.decodeMonoWaveFileAsShortArray(file)
 
             // Create a NEW instance of FeatureExtractor for each test
             // (This is important for proper testing)
@@ -76,7 +78,7 @@ class MainActivity : ComponentActivity() {
             val featuresArray: ShortArray = featureExtractor.process(audioArrayCopy)
             println("MainActivity: JNI: featuresFromFloatArray.size = ${featuresArray.size}")
 
-            // Optional: pass data tu state
+            // Optional: pass data tu state flow
             spectrogramData.value = FloatArray(featuresArray.size){ i -> featuresArray[i].toFloat() }
 
             // Print
