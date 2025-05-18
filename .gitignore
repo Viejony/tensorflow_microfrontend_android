@@ -15,7 +15,6 @@
 local.properties
 
 
-# Ignore everything in the third_party folder
-third_party/*
-!third_party/.gitkeep
+third_party/flatbuffers/*
+third_party/kissfft/*
 
