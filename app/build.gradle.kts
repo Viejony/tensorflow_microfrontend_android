@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.ir.backend.js.compile
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -43,8 +41,7 @@ android {
 
 dependencies {
 
-    // Microfrontend libs
-    implementation(files("libs/tensorflow-microfrontend.aar"))
+    // Microfrontend lib
     implementation(project(":microfrontend"))
 
     implementation(libs.androidx.core.ktx)
@@ -64,11 +61,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // Kotlin Coroutines Core
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation(libs.kotlinx.coroutines.core)
 
     // Coroutines for Android (provides Dispatchers.Main)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(libs.kotlinx.coroutines.android)
 
     // Optional: Lifecycle coroutine support
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation(libs.androidx.lifecycle.runtime.ktx.v270)
 }

@@ -4,64 +4,31 @@ project("microfrontend")
 # Paths
 set(TENSORFLOW_DIR ${CMAKE_SOURCE_DIR}/../../../../third_party/tensorflow)
 set(KISSFFT_DIR ${CMAKE_SOURCE_DIR}/../../../../third_party/kissfft)
-set(FLATBUFFERS_DIR ${CMAKE_SOURCE_DIR}/../../../../third_party/flatbuffers)
 set(KISSFFT_BINARY_DIR ${CMAKE_BINARY_DIR}/kissfft_build)
+set(FLATBUFFERS_DIR ${CMAKE_SOURCE_DIR}/../../../../third_party/flatbuffers)
+set(FLATBUFFERS_BINARY_DIR ${CMAKE_BINARY_DIR}/flatbuffers_build)
 
 
 
 # Flatbuffers
-include_directories(${FLATBUFFERS_DIR}/include)
+set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "Disable FlatBuffers tests" FORCE)
+set(FLATBUFFERS_BUILD_FLATC OFF CACHE BOOL "Disable FlatBuffers compiler (flatc)" FORCE)
+set(FLATBUFFERS_BUILD_SHAREDLIB OFF CACHE BOOL "Build FlatBuffers as a static library only" FORCE)
 
-set(FlatBuffers_Library_SRCS
-        ${FLATBUFFERS_DIR}/include/flatbuffers/allocator.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/array.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/base.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/buffer.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/buffer_ref.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/default_allocator.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/detached_buffer.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/flatbuffer_builder.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/flatbuffers.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/flexbuffers.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/flex_flat_util.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/hash.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/idl.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/minireflect.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/reflection.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/reflection_generated.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/registry.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/stl_emulation.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/string.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/struct.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/table.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/util.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/vector.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/vector_downward.h
-        ${FLATBUFFERS_DIR}/include/flatbuffers/verifier.h
-        ${FLATBUFFERS_DIR}/src/idl_parser.cpp
-        ${FLATBUFFERS_DIR}/src/idl_gen_text.cpp
-        ${FLATBUFFERS_DIR}/src/reflection.cpp
-        ${FLATBUFFERS_DIR}/src/util.cpp
-        ${FLATBUFFERS_DIR}/src/idl_gen_fbs.cpp
-        ${FLATBUFFERS_DIR}/src/code_generators.cpp
-)
-add_library(flatbuffers STATIC ${FlatBuffers_Library_SRCS})
-
+# Add the FlatBuffers CMake project (this defines the 'flatbuffers' target)
+add_subdirectory(${FLATBUFFERS_DIR} ${FLATBUFFERS_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 
 # Kissfft
 
 ## Standard options used by upstream KISSFFT
+set(KISSFFT_DATATYPE int16_t CACHE STRING "Fixed-point data type" FORCE)
 set(KISSFFT_OPENMP OFF CACHE BOOL "Disable OpenMP support" FORCE)
 set(KISSFFT_STATIC ON CACHE BOOL "Build as a static library" FORCE)
 set(KISSFFT_TEST OFF CACHE BOOL "Disable building tests" FORCE)
 set(KISSFFT_TOOLS OFF CACHE BOOL "Disable building tools" FORCE)
 set(KISSFFT_USE_ALLOCA OFF CACHE BOOL "Avoid alloca() for portability" FORCE)
-
-## Match TensorFlow's Microfrontend build config
-add_definitions(-DKISSFFT_DATATYPE=int16_t)
-
-## Include kissfft as a subproject
+#add_definitions(-DKISSFFT_DATATYPE=int16_t)
 add_subdirectory(${KISSFFT_DIR} ${KISSFFT_BINARY_DIR})
 include_directories(${KISSFFT_DIR})
 
@@ -74,20 +41,6 @@ include_directories(
         ${TENSORFLOW_DIR}
         ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend
         ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/bits.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/fft_util.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/filterbank.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/filterbank_util.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/frontend.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/frontend_util.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/log_scale_util.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/log_lut.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/noise_reduction.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/noise_reduction_util.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/pcan_gain_control.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/pcan_gain_control_util.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/window.h
-        ${TENSORFLOW_DIR}/tensorflow/lite/experimental/microfrontend/lib/window_util.h
         ${TENSORFLOW_DIR}/tensorflow/lite/kernels
         ${TENSORFLOW_DIR}/tensorflow/lite/kernels/internal
         ${TENSORFLOW_DIR}/tensorflow/lite/tools/make/downloads/flatbuffers/include
@@ -122,11 +75,20 @@ add_library(audio_microfrontend STATIC ${FRONTEND_SRCS})
 # Shared library (this is what Android uses)
 add_library(${CMAKE_PROJECT_NAME} SHARED jmicrofrontend.cpp)
 
-# Link math library if needed
-target_link_libraries(audio_microfrontend m)
-target_link_libraries(${CMAKE_PROJECT_NAME} audio_microfrontend kissfft flatbuffers)
-target_link_libraries(${CMAKE_PROJECT_NAME} android log)
-
+# Link libraries to the microfrontend targets:
+# - Link FlatBuffers and KissFFT to the shared library (as these provide functionality needed at runtime)
+# - Also ensure the static lib gets any includes/flags it needs from FlatBuffers
+target_link_libraries(audio_microfrontend
+        PRIVATE flatbuffers             # FlatBuffers static lib (for header usage if needed by audio_microfrontend.cc)
+        PUBLIC kissfft                  # FFT library (already added via add_subdirectory)
+        PUBLIC m                        # math library for FFT (if required on this platform)
+)
+target_link_libraries(${CMAKE_PROJECT_NAME}
+        PUBLIC audio_microfrontend      # Microfrontend DSP code
+        PUBLIC kissfft                  # FFT library
+        PUBLIC flatbuffers              # FlatBuffers library for model parsing support
+        PUBLIC android log              # Android NDK libraries (if building for Android)
+)
 
 
 
