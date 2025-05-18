@@ -3,7 +3,7 @@
 This project is a port of Tensorflow's *microfrontend* framework for Android, inspired
 by [multilingual_kws](https://github.com/harvard-edge/multilingual_kws) project and the usage of this framework to generate feature vectors of audio samples.
 
-The library generates a feature vector (a custom MFCC spectrogram) from an input audio.
+The library generates a feature vector (a custom MFCC spectrogram) from an input audio. It's just fast.
 
 
 ## Usage
@@ -40,7 +40,7 @@ The next steps generate an AAR file that can be used in other apps.
 
 1. Get tensorflow submodule:
     ```bash
-    git submodule init
+    git submodule update
     ```
 2. Download and uncompress third party libraries using this command:
     ```bash
@@ -48,17 +48,21 @@ The next steps generate an AAR file that can be used in other apps.
     ```
 3. Build using gradle:
     ```bash
+    # You may need to set the Android SDK path
+    export ANDROID_HOME=~/Android/Sdk
+
+    # Built
     ./gradlew :microfrontend:assembleRelease
     ```
 4. Generated file will be in *microfrontend/build/outputs/aar* folder.
 
 
-## Use AAR file as library
+## Use AAR file as library in your own app
 1. To use this AAR file as a library, in your app folder, copy the file inside libs folder.
     ```bash
     cp <android_audio_microfrontend_path>/microfrontend/build/outputs/aar/microfrontend-release.aar <your_app_path>/app/libs/
     ```
-2. Add libs folder to *settings.gradle.kts* on repositories section: Example:
+2. Add libs folder to *settings.gradle.kts* on repositories section. Example:
     ```kotlin
     repositories {
         ...
@@ -70,7 +74,7 @@ The next steps generate an AAR file that can be used in other apps.
 3. Add the implementation to *build.gradle.kts* (app level) on dependencies section. Example:
     ```kotlin
     dependencies {
-        implementation(files("libs/tensorflow-lite.aar"))
+        implementation(files("libs/microfrontend-release.aar"))
         ...
     }
     ```
