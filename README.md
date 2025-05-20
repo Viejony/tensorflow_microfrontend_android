@@ -40,7 +40,7 @@ The next steps generate an AAR file that can be used in other apps.
 
 1. Get tensorflow submodule:
     ```bash
-    git submodule update
+    git submodule update --init
     ```
 2. Download and uncompress third party libraries using this command:
     ```bash
