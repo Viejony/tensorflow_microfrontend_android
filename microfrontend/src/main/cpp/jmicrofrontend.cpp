@@ -17,7 +17,7 @@ static bool g_state_ready = false;
 static bool g_enable_log = false;
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_jamstudios_microfrontend_FeatureExtractor_init
+Java_io_viejony_microfrontend_FeatureExtractor_init
 (
     JNIEnv*,
     jobject /* this */,
@@ -60,7 +60,7 @@ Java_com_jamstudios_microfrontend_FeatureExtractor_init
 // ---------------------------------------------------------
 // Main feature‑extraction entry point.
 extern "C" JNIEXPORT jshortArray JNICALL
-Java_com_jamstudios_microfrontend_FeatureExtractor_process
+Java_io_viejony_microfrontend_FeatureExtractor_process
 (
     JNIEnv* env,
     jobject /* this */,

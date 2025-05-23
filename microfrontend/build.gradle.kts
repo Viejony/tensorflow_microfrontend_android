@@ -1,10 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("com.vanniktech.maven.publish") version "0.32.0"
 }
 
 android {
-    namespace = "com.jamstudios.microfrontend"
+    namespace = "io.github.viejony"
+
     compileSdk = 35
 
     defaultConfig {

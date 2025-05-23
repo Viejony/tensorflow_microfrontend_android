@@ -1,4 +1,4 @@
-package com.jamstudios.amf_example
+package io.viejony.amf_example
 
 import android.util.Log
 

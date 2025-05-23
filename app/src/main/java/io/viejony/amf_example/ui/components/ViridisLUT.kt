@@ -1,4 +1,4 @@
-package com.jamstudios.amf_example.ui.components
+package io.viejony.amf_example.ui.components
 
 val VIRIDIS_LUT: IntArray = longArrayOf(
     0xFF440154, 0xFF440255, 0xFF440357, 0xFF450558, 0xFF45065A, 0xFF45085B, 0xFF46095C, 0xFF460B5E,

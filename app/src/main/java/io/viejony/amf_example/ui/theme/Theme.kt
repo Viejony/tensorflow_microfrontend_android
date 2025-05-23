@@ -1,4 +1,4 @@
-package com.jamstudios.amf_example.ui.theme
+package io.viejony.amf_example.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

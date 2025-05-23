@@ -1,4 +1,4 @@
-package com.jamstudios.microfrontend
+package io.viejony.microfrontend
 
 import android.content.Context
 import java.io.ByteArrayOutputStream

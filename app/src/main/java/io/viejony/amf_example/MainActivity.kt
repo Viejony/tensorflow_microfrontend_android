@@ -1,4 +1,4 @@
-package com.jamstudios.amf_example
+package io.viejony.amf_example
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,10 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.lifecycleScope
-import com.jamstudios.amf_example.ui.screens.MainScreen
-import com.jamstudios.amf_example.ui.theme.AudioMicrofrontendExampleTheme
-import com.jamstudios.microfrontend.AudioUtils
-import com.jamstudios.microfrontend.FeatureExtractor
+import io.viejony.amf_example.ui.screens.MainScreen
+import io.viejony.amf_example.ui.theme.AudioMicrofrontendExampleTheme
+import io.viejony.microfrontend.AudioUtils
+import io.viejony.microfrontend.FeatureExtractor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

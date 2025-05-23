@@ -1,4 +1,4 @@
-package com.jamstudios.microfrontend
+package io.viejony.microfrontend
 
 class FeatureExtractor {
 

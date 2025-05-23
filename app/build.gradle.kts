@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jamstudios.amf_example"
+    namespace = "io.viejony.amf_example"
     compileSdk = 35
 
     defaultConfig {

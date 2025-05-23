@@ -1,4 +1,4 @@
-package com.jamstudios.amf_example.ui.screens
+package io.viejony.amf_example.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,8 +15,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.jamstudios.amf_example.ui.components.SpectrogramView
-import com.jamstudios.amf_example.ui.theme.AudioMicrofrontendExampleTheme
+import io.viejony.amf_example.ui.components.SpectrogramView
+import io.viejony.amf_example.ui.theme.AudioMicrofrontendExampleTheme
 
 @Composable
 fun MainScreen(

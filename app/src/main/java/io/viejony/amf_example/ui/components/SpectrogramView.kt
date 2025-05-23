@@ -1,4 +1,4 @@
-package com.jamstudios.amf_example.ui.components
+package io.viejony.amf_example.ui.components
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
