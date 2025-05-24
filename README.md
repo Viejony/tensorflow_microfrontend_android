@@ -7,10 +7,19 @@ The library generates a feature vector (a custom MFCC spectrogram) from an input
 
 
 ## Usage
-1. Obtain an audio sample of one second length, PCM mono and with a sample rate of 16000. Source can be the mic or an assets WAV file.
-2. Convert such audio samples into a ShortArray. You can use AudioUtils object:
+1. Add the dependency:
+   - Gradle (Kotlin) 
     ```kotlin
-    import com.jamstudios.microfrontend.AudioUtils
+    implementation("io.github.viejony:microfrontend:0.1.0")
+    ```
+    - Gradle (short)
+    ```
+    implementation 'io.github.viejony:microfrontend:0.1.0'
+    ```
+2. Obtain an audio sample of one second length, PCM mono and with a sample rate of 16000. Source can be the mic or an assets WAV file.
+3. Convert such audio samples into a ShortArray. You can use AudioUtils object:
+    ```kotlin
+    import io.viejony.microfrontend.AudioUtils
 
     // From a WAV file
     val audioArray = AudioUtils.decodeMonoWaveFileAsShortArray(file)
@@ -18,9 +27,9 @@ The library generates a feature vector (a custom MFCC spectrogram) from an input
     // Or from a PCM Byte array
     val audioArray = AudioUtils.pcm16ByteArrayToShortArray(pcmBytes)
     ```
-3. Use the *FeatureExtractor* class to obtains the features vector:
+4. Use the *FeatureExtractor* class to obtains the features vector:
     ```kotlin
-    import com.jamstudios.microfrontend.FeatureExtractor
+    import io.viejony.microfrontend.FeatureExtractor
 
     // Init with audio sample rate
     val featureExtractor = FeatureExtractor()
@@ -31,8 +40,9 @@ The library generates a feature vector (a custom MFCC spectrogram) from an input
     ```
 5. For an audio data array of 1 second length and 16000 samples, the result will be a ShortArray with 1960 values. As a spectrogram, this is a image of 40x49 (width x height), similar to this:
 
-<img src="images/spec.png" width="400"/>
-
+<p align="center">
+    <img src="images/spec.png" width="400"/>
+</p>
 
 ## Generate AAR
 
@@ -81,7 +91,9 @@ The next steps generate an AAR file that can be used in other apps.
 
 ## Example app
 
-<img src="images/example_app.png" width="400"/>
+<p align="center">
+    <img src="images/example_app.png" width="400"/>
+</p>
 
 The Android app uses this *microfrontend* library to generate the spectrogram of a sample audio. At main view, shows such spectrogram using the viridis color map.
 
