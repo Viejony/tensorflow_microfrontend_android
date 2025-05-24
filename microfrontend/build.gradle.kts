@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -6,7 +8,6 @@ plugins {
 
 android {
     namespace = "io.github.viejony"
-
     compileSdk = 35
 
     defaultConfig {
@@ -44,6 +45,43 @@ android {
         jvmTarget = "11"
     }
 }
+
+group = "io.github.viejony"
+version = "0.1.0"
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    signAllPublications()
+
+    coordinates(group.toString(), "microfrontend", version.toString())
+
+    pom {
+        name = "Tensorflow Audio Microfrontend"
+        description = "Tensorflow Audio Microfrontend: Library for Android Application"
+        inceptionYear = "2025"
+        url = "https://github.com/Viejony/tensorflow_microfrontend_android"
+        licenses {
+            license {
+                name = "MIT License"
+                url = "https://opensource.org/licenses/MIT"
+            }
+        }
+        developers {
+            developer {
+                id = "Viejony"
+                name = "Jhonyfer Angarita Moreno"
+                url = "https://github.com/Viejony"
+            }
+        }
+        scm {
+            connection = "scm:git:git://github.com/Viejony/tensorflow_microfrontend_android.git"
+            developerConnection = "scm:git:ssh://git@github.com/Viejony/tensorflow_microfrontend_android.git"
+            url = "https://github.com/Viejony/tensorflow_microfrontend_android"
+        }
+    }
+}
+
 
 dependencies {
 
